@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://fingerprint.cdsc42kaaniv.ap-northeast-2.rds.amazonaws.com:5432/postgres
-    username: fingerprint
+    username: postgres
     password: fingerprint
 
   jpa:
