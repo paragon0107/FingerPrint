@@ -11,7 +11,7 @@ import school.fingerprint.patient.service.PatientService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/patient")
+@RequestMapping("/api/patient")
 public class PatientController {
 
     private final PatientService patientService;
@@ -27,7 +27,7 @@ public class PatientController {
         );
     }
 
-    @PutMapping("/location/{ssid}")
+    @PutMapping("/{ssid}")
     public ResponseEntity<SuccessResponse<?>> updatePatientLocation(
             @PathVariable("ssid") String ssid,
             @RequestBody PatientLocationUpdate request

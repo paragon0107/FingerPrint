@@ -20,6 +20,7 @@ public class PatientService {
     private final PatientWebSocketHandler locationHandler;
     private final AiServerClient aiServerClient;
 
+    @Transactional
     public void createPatient(final PatientCreateRequest request) {
         Patient patient = Patient.of(
                 request.name(),
@@ -29,6 +30,7 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
+    @Transactional
     public void updatePatientLocation(final String ssid, PatientLocationUpdate request) {
         Patient patient = getPatient(ssid);
         String location = aiServerClient.getPatientStatusFromAi(request.locations());
