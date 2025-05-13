@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.patient.dto.PatientCreateRequest;
 import school.fingerprint.patient.dto.PatientLocationUpdate;
 import school.fingerprint.patient.entity.PatientLocatedInfo;
+import school.fingerprint.patient.port.dto.PredictedLocation;
 import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.port.AiServerClient;
 import school.fingerprint.patient.repository.PatientJpaRepository;
@@ -33,10 +34,10 @@ public class PatientService {
     @Transactional
     public void updatePatientLocation(final String ssid, PatientLocationUpdate request) {
         Patient patient = getPatient(ssid);
-        String location = aiServerClient.getPatientStatusFromAi(request.locations());
+        PredictedLocation location = aiServerClient.getPatientStatusFromAi(request.locations());
         locationHandler.updatePatientInfo(PatientLocatedInfo.of(
                 patient,
-                location
+                location.predicted_location()
         ));
     }
 
