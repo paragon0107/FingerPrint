@@ -38,4 +38,15 @@ public class PatientController {
                 "환자 위치 업데이트 성공"
         );
     }
+
+    @DeleteMapping("/{ssid}")
+    public ResponseEntity<SuccessResponse<?>> deletePatientLocation(
+            @PathVariable("ssid") String ssid
+    ) {
+        patientService.deletePatientLocation(ssid);
+        return SuccessResponse.of(
+                HttpStatus.OK,
+                "환자 위치 업데이트 성공"
+        );
+    }
 }

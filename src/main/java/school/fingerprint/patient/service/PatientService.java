@@ -55,4 +55,8 @@ public class PatientService {
                 }
         );
     }
+
+    public void deletePatientLocation(final String ssid) {
+        locationHandler.deletePatientInfo(ssid);
+    }
 }
