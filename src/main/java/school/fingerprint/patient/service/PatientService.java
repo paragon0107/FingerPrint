@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.patient.dto.PatientCreateRequest;
 import school.fingerprint.patient.dto.PatientLocationUpdate;
 import school.fingerprint.patient.entity.PatientLocatedInfo;
-import school.fingerprint.patient.port.dto.PredictedLocation;
-import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.port.AiServerClient;
+import school.fingerprint.patient.port.dto.PredictedLocation;
 import school.fingerprint.patient.repository.PatientJpaRepository;
+import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
 @Service
@@ -36,7 +36,7 @@ public class PatientService {
     public void updatePatientLocation(final String ssid, PatientLocationUpdate request) {
         Patient patient = getPatient(ssid);
         PredictedLocation location = aiServerClient.getPatientStatusFromAi(request.locations());
-        locationHandler.updatePatientInfo(PatientLocatedInfo.of(
+        locationHandler.updatePatientLocatedInfo(PatientLocatedInfo.of(
                 patient,
                 location.predicted_location()
         ));

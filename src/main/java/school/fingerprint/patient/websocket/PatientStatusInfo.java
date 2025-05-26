@@ -6,7 +6,7 @@ import school.fingerprint.patient.entity.PatientLocatedInfo;
 @Getter
 public class PatientStatusInfo extends PatientLocatedInfo {
 
-    private final String type;
+    private String type;
 
     public PatientStatusInfo(PatientLocatedInfo patient) {
         super(
@@ -18,5 +18,15 @@ public class PatientStatusInfo extends PatientLocatedInfo {
                 patient.getSsid()
         );
         this.type = "active";
+    }
+
+    public void updateStatus(final String type) {
+        this.type = type;
+    }
+
+    public void updateLocation(final String place, final int x, final int y) {
+        super.place = place;
+        super.x = x;
+        super.y = y;
     }
 }

@@ -20,7 +20,13 @@ public class Emergency extends BaseTime {
 
     private Long patientId;
 
+    private String reason;
+
     public static Emergency of(final Long patientId) {
-        return new Emergency(null, patientId);
+        return new Emergency(null, patientId,null);
+    }
+
+    public void confirm(final String reason) {
+        this.reason = reason;
     }
 }

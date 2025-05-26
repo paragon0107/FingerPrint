@@ -1,14 +1,18 @@
 package school.fingerprint.emergency.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
 import school.fingerprint.emergency.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
-
-import java.util.Optional;
+import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
 @Service
 @RequiredArgsConstructor
@@ -16,14 +20,45 @@ public class EmergencyService {
 
     private final EmergencyJpaRepository emergencyJpaRepository;
     private final PatientJpaRepository patientJpaRepository;
+    private final PatientWebSocketHandler handler;
 
+    @Transactional
     public void createEmergency(final EmergencyCreateRequest request) {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
         emergencyJpaRepository.save(Emergency.of(patient.getId()));
-        //웹소켓 데이터 불러와서 그 환자가 소켓 상에 있는지 확인.
-        //소켓상에 있는 데이터들을 emergency로 변경
 
+        if(handler.isContainPatient(patient.getSsid())){
+            handler.updatePatientStatusInfo(
+                patient.getSsid(),
+                "emergency"
+            );
+        } else {
+            throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
+        }
+    }
+
+    @Transactional
+    public void confirmEmergency(final EmergencyConfirmRequest request) {
+        Emergency emergency = emergencyJpaRepository.findById(request.emergencyId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
+        Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
+        Patient patient = checkPresent(patientNullable);
+        if(handler.isContainPatient(patient.getSsid())){
+            handler.updatePatientStatusInfo(
+                patient.getSsid(),
+                "active"
+            );
+        } else {
+            throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
+        }
+        emergency.confirm(request.reason());
+        emergencyJpaRepository.save(emergency);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Emergency> getEmergency(final LocalDate date) {
+        return emergencyJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
     }
 
     private static Patient checkPresent(final Optional<Patient> patient) {
@@ -31,5 +66,14 @@ public class EmergencyService {
             throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
         }
         return patient.get();
+    }
+
+    public List<Emergency> getEmergencyByPatientId(final Long patientId) {
+        return emergencyJpaRepository.findAllByPatientId(patientId);
+    }
+
+    public Emergency getEmergencyById(final Long emergencyId) {
+        return emergencyJpaRepository.findById(emergencyId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
     }
 }

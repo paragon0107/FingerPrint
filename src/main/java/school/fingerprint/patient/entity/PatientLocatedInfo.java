@@ -1,19 +1,18 @@
 package school.fingerprint.patient.entity;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import school.fingerprint.patient.repository.entity.Patient;
-
-import java.util.Arrays;
 
 @AllArgsConstructor
 @Getter
 public class PatientLocatedInfo {
     long id;
     String name;
-    String place;
-    int x;
-    int y;
+    protected String place;
+    protected int x;
+    protected int y;
     String ssid;
 
     public static PatientLocatedInfo of(

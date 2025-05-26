@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PatientWebSocketHandler extends TextWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
-    private final Map<String, PatientLocatedInfo> patientMap = new ConcurrentHashMap<>();
+    private final Map<String, PatientStatusInfo> patientMap = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -44,12 +44,21 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    public void updatePatientInfo(final PatientLocatedInfo info) {
-        PatientStatusInfo patientStatusInfo = new PatientStatusInfo(info);
-        patientMap.put(patientStatusInfo.getSsid(), patientStatusInfo);
+    public void updatePatientLocatedInfo(final PatientLocatedInfo request) {
+        PatientStatusInfo info = patientMap.get(request.getSsid());
+        if(info == null){
+            info = new PatientStatusInfo(request);
+        }else {
+            info.updateLocation(
+                request.getPlace(),
+                request.getX(),
+                request.getY()
+            );
+        }
+        patientMap.put(info.getSsid(), info);
         String json;
         try {
-            json = mapper.writeValueAsString(patientStatusInfo);
+            json = mapper.writeValueAsString(info);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +94,26 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
                 sessions.remove(session);
             }
         }
+    }
+
+    public boolean isContainPatient(final String ssid) {
+        return patientMap.containsKey(ssid);
+    }
+
+
+    public void updatePatientStatusInfo(final String ssid, final String  state) {
+        PatientStatusInfo info = patientMap.get(ssid);
+        if (info == null) {
+            throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
+        }
+        info.updateStatus(state);
+        String json;
+        try {
+            json = mapper.writeValueAsString(info);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        broadcast(json);
     }
 
     // --- 10초마다 ping 보내기 (Heartbeat) ---
