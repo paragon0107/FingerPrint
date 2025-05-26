@@ -16,7 +16,7 @@ public class AiServerClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public PredictedLocation getPatientStatusFromAi(final Map<String, Integer> data) {
-        String url = "http://3.34.107.14:8000/predict";
+        String url = "http://fp-ai.duckdns.org:8000/predict";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

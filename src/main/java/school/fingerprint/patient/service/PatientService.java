@@ -23,6 +23,7 @@ public class PatientService {
 
     @Transactional
     public void createPatient(final PatientCreateRequest request) {
+        existPatientDevice(request.ssid());
         Patient patient = Patient.of(
                 request.name(),
                 request.birth(),
@@ -45,5 +46,17 @@ public class PatientService {
         return patientRepository.findBySsid(ssid).orElseThrow(
                 () -> new IllegalArgumentException("환자 없음")
         );
+    }
+
+    private void existPatientDevice(final String ssid) {
+        patientRepository.findBySsid(ssid).ifPresent(
+                patient -> {
+                    throw new IllegalArgumentException("이미 등록된 기기입니다.");
+                }
+        );
+    }
+
+    public void deletePatientLocation(final String ssid) {
+        locationHandler.deletePatientInfo(ssid);
     }
 }
