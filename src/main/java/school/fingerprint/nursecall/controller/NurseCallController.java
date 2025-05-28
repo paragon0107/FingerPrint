@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.global.dto.SuccessResponse;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
-import school.fingerprint.nursecall.entity.NurseCall;
+import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.nursecall.service.NurseCallService;
 
 @RestController

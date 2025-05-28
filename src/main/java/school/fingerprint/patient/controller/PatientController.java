@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import school.fingerprint.global.dto.SuccessResponse;
 import school.fingerprint.patient.dto.PatientCreateRequest;
 import school.fingerprint.patient.dto.PatientLocationUpdate;
+import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.service.PatientService;
 
 @RestController
@@ -47,6 +48,17 @@ public class PatientController {
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "환자 위치 업데이트 성공"
+        );
+    }
+
+    @GetMapping("/{patientId}")
+    public ResponseEntity<SuccessResponse<Patient>> getPatient(
+            @PathVariable("patientId") String patientId
+    ) {
+        return SuccessResponse.of(
+                HttpStatus.OK,
+                "환자 정보 조회 성공",
+                patientService.getPatient(patientId)
         );
     }
 }

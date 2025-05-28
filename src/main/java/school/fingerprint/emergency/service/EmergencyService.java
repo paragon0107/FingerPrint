@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
-import school.fingerprint.emergency.entity.Emergency;
+import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;

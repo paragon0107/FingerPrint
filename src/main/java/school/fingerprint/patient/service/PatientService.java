@@ -42,7 +42,7 @@ public class PatientService {
         ));
     }
 
-    private Patient getPatient(final String ssid) {
+    public Patient getPatient(final String ssid) {
         return patientRepository.findBySsid(ssid).orElseThrow(
                 () -> new IllegalArgumentException("환자 없음")
         );

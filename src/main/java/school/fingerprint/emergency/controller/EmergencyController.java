@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
-import school.fingerprint.emergency.entity.Emergency;
+import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.emergency.service.EmergencyService;
 import school.fingerprint.global.dto.SuccessResponse;
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
-import school.fingerprint.nursecall.entity.NurseCall;
+import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.nursecall.repository.NurseCallJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
