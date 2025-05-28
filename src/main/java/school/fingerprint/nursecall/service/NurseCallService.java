@@ -1,6 +1,7 @@
 package school.fingerprint.nursecall.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,8 @@ public class NurseCallService {
     }
 
     @Transactional(readOnly = true)
-    public List<NurseCall> getNurseCall(final LocalDate date) {
-        return nurseCallJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+    public List<NurseCall> getNurseCall(final LocalDateTime date) {
+        return nurseCallJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(date);
     }
 
     private static Patient checkPresent(final Optional<Patient> patient) {

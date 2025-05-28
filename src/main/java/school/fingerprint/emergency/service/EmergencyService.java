@@ -1,6 +1,7 @@
 package school.fingerprint.emergency.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,8 @@ public class EmergencyService {
     }
 
     @Transactional(readOnly = true)
-    public List<Emergency> getEmergency(final LocalDate date) {
-        return emergencyJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+    public List<Emergency> getEmergency(final LocalDateTime date) {
+        return emergencyJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(date);
     }
 
     private static Patient checkPresent(final Optional<Patient> patient) {

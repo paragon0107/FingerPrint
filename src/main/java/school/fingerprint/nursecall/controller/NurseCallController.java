@@ -1,6 +1,7 @@
 package school.fingerprint.nursecall.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class NurseCallController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<NurseCall>>> getNurseCallByDate(
-            @RequestParam(value = "date", required = true) LocalDate date
+            @RequestParam(value = "date", required = true) LocalDateTime date
     ) {
         List<NurseCall> response = nurseCallService.getNurseCall(date);
         return SuccessResponse.of(
