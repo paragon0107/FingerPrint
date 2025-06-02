@@ -10,6 +10,8 @@ import school.fingerprint.patient.dto.PatientLocationUpdate;
 import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.service.PatientService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/patient")
@@ -53,12 +55,22 @@ public class PatientController {
 
     @GetMapping("/{patientId}")
     public ResponseEntity<SuccessResponse<Patient>> getPatient(
-            @PathVariable("patientId") String patientId
+            @PathVariable("patientId") long patientId
     ) {
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "환자 정보 조회 성공",
-                patientService.getPatient(patientId)
+                patientService.getPatientById(patientId)
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponse<List<Patient>>> getPatients(
+    ) {
+        return SuccessResponse.of(
+                HttpStatus.OK,
+                "환자 정보 조회 성공",
+                patientService.getPatients()
         );
     }
 }

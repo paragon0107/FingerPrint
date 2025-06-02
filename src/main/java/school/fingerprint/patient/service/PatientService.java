@@ -12,6 +12,8 @@ import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,5 +60,15 @@ public class PatientService {
 
     public void deletePatientLocation(final String ssid) {
         locationHandler.deletePatientInfo(ssid);
+    }
+
+    public Patient getPatientById(final long patientId) {
+        return patientRepository.findById(patientId).orElseThrow(
+                () -> new IllegalArgumentException("환자 없음")
+        );
+    }
+
+    public List<Patient> getPatients() {
+        return patientRepository.findAll();
     }
 }
