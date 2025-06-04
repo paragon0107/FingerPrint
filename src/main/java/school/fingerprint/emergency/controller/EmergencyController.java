@@ -1,6 +1,7 @@
 package school.fingerprint.emergency.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
 import school.fingerprint.emergency.dto.EmergencyInfoResponse;
-import school.fingerprint.emergency.entity.Emergency;
 import school.fingerprint.emergency.service.EmergencyService;
 import school.fingerprint.global.dto.SuccessResponse;
 
@@ -40,7 +40,7 @@ public class EmergencyController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<EmergencyInfoResponse>>> getEmergencyByDate(
-            @RequestParam(value = "date", required = true) LocalDate date
+            @RequestParam(value = "date", required = true) LocalDateTime date
     ) {
         List<EmergencyInfoResponse> response = emergencyService.getEmergency(date);
         return SuccessResponse.of(

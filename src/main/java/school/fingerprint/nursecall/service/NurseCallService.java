@@ -1,6 +1,6 @@
 package school.fingerprint.nursecall.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
 import school.fingerprint.nursecall.dto.NurseCallInfoResponse;
-import school.fingerprint.nursecall.entity.NurseCall;
 import school.fingerprint.nursecall.repository.NurseCallJpaRepository;
+import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
@@ -59,9 +59,9 @@ public class NurseCallService {
     }
 
     @Transactional(readOnly = true)
-    public List<NurseCallInfoResponse> getNurseCall(final LocalDate date) {
+    public List<NurseCallInfoResponse> getNurseCall(final LocalDateTime date) {
         List<NurseCallInfoResponse> responses = new ArrayList<>();
-        List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByDateAfterOrderByDateDesc(
+        List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(
                 date);
         nurseCalls.forEach(nurseCall -> {
             Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());

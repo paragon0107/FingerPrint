@@ -1,7 +1,6 @@
 package school.fingerprint.emergency.dto;
 
-import school.fingerprint.emergency.entity.Emergency;
-import school.fingerprint.nursecall.entity.NurseCall;
+import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.patient.repository.entity.Patient;
 
 public record EmergencyInfoResponse(

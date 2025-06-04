@@ -1,4 +1,4 @@
-package school.fingerprint.nursecall.entity;
+package school.fingerprint.emergency.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import school.fingerprint.global.entity.BaseTime;
 @NoArgsConstructor
 @Getter
 @Entity
-public class NurseCall extends BaseTime {
+public class Emergency extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ public class NurseCall extends BaseTime {
 
     private String reason;
 
-    public static NurseCall of(final Long patientId) {
-        return new NurseCall(null, patientId,null);
+    public static Emergency of(final Long patientId) {
+        return new Emergency(null, patientId,null);
     }
 
     public void confirm(final String reason) {

@@ -1,6 +1,6 @@
 package school.fingerprint.nursecall.dto;
 
-import school.fingerprint.nursecall.entity.NurseCall;
+import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.repository.entity.Patient;
 
 public record NurseCallInfoResponse(

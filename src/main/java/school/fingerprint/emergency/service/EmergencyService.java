@@ -2,6 +2,7 @@ package school.fingerprint.emergency.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
 import school.fingerprint.emergency.dto.EmergencyInfoResponse;
-import school.fingerprint.emergency.entity.Emergency;
+import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
@@ -59,9 +60,9 @@ public class EmergencyService {
     }
 
     @Transactional(readOnly = true)
-    public List<EmergencyInfoResponse> getEmergency(final LocalDate date) {
+    public List<EmergencyInfoResponse> getEmergency(final LocalDateTime date) {
         List<EmergencyInfoResponse> responses = new ArrayList<>();
-        List<Emergency> emergencies = emergencyJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+        List<Emergency> emergencies = emergencyJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(date);
         emergencies.forEach(emergency -> {
             Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
             Patient patient = checkPresent(patientNullable);

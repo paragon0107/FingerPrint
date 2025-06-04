@@ -27,6 +27,16 @@ public class Patient {
     private String name;
     
     private LocalDate birth;
+
+    private boolean gender;
+
+    private String bloodType;
+
+    private String careDoctor;
+
+    private String disease;
+
+    private String roomNumber;
     
     private String ssid;
 
