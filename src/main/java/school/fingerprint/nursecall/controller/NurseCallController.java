@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.global.dto.SuccessResponse;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
+import school.fingerprint.nursecall.dto.NurseCallInfoResponse;
 import school.fingerprint.nursecall.entity.NurseCall;
 import school.fingerprint.nursecall.service.NurseCallService;
 
@@ -38,10 +39,10 @@ public class NurseCallController {
     }
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<NurseCall>>> getNurseCallByDate(
+    public ResponseEntity<SuccessResponse<List<NurseCallInfoResponse>>> getNurseCallByDate(
             @RequestParam(value = "date", required = true) LocalDate date
     ) {
-        List<NurseCall> response = nurseCallService.getNurseCall(date);
+        List<NurseCallInfoResponse> response = nurseCallService.getNurseCall(date);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "널스 콜 조회 성공",
@@ -61,10 +62,10 @@ public class NurseCallController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<SuccessResponse<List<NurseCall>>> getNurseCallByPatientId(
+    public ResponseEntity<SuccessResponse<List<NurseCallInfoResponse>>> getNurseCallByPatientId(
             @PathVariable("patientId") Long patientId
     ) {
-        List<NurseCall> response = nurseCallService.getNurseCallByPatientId(patientId);
+        List<NurseCallInfoResponse> response = nurseCallService.getNurseCallByPatientId(patientId);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "널스 콜 환자 별 조회 성공",
@@ -73,10 +74,10 @@ public class NurseCallController {
     }
 
     @GetMapping("/{nurseCallId}")
-    public ResponseEntity<SuccessResponse<NurseCall>> getNurseCallById(
+    public ResponseEntity<SuccessResponse<NurseCallInfoResponse>> getNurseCallById(
             @PathVariable("nurseCallId") Long nurseCallId
     ) {
-        NurseCall response = nurseCallService.getNurseCallById(nurseCallId);
+        NurseCallInfoResponse response = nurseCallService.getNurseCallById(nurseCallId);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "널스 콜 ID 조회 성공",

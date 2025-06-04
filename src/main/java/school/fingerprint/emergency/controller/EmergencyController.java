@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
+import school.fingerprint.emergency.dto.EmergencyInfoResponse;
 import school.fingerprint.emergency.entity.Emergency;
 import school.fingerprint.emergency.service.EmergencyService;
 import school.fingerprint.global.dto.SuccessResponse;
@@ -38,10 +39,10 @@ public class EmergencyController {
     }
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<Emergency>>> getEmergencyByDate(
+    public ResponseEntity<SuccessResponse<List<EmergencyInfoResponse>>> getEmergencyByDate(
             @RequestParam(value = "date", required = true) LocalDate date
     ) {
-        List<Emergency> response = emergencyService.getEmergency(date);
+        List<EmergencyInfoResponse> response = emergencyService.getEmergency(date);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "응급 콜 조회 성공",
@@ -61,10 +62,10 @@ public class EmergencyController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<SuccessResponse<List<Emergency>>> getEmergencyByPatientId(
+    public ResponseEntity<SuccessResponse<List<EmergencyInfoResponse>>> getEmergencyByPatientId(
             @PathVariable("patientId") Long patientId
     ) {
-        List<Emergency> response = emergencyService.getEmergencyByPatientId(patientId);
+        List<EmergencyInfoResponse> response = emergencyService.getEmergencyByPatientId(patientId);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "응급 콜 환자 별 조회 성공",
@@ -73,10 +74,10 @@ public class EmergencyController {
     }
 
     @GetMapping("/{emergencyId}")
-    public ResponseEntity<SuccessResponse<Emergency>> getEmergencyById(
+    public ResponseEntity<SuccessResponse<EmergencyInfoResponse>> getEmergencyById(
             @PathVariable("emergencyId") Long emergencyId
     ) {
-        Emergency response = emergencyService.getEmergencyById(emergencyId);
+        EmergencyInfoResponse response = emergencyService.getEmergencyById(emergencyId);
         return SuccessResponse.of(
                 HttpStatus.OK,
                 "응급 콜 ID 조회 성공",

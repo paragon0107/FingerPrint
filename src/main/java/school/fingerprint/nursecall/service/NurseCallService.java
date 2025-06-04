@@ -1,6 +1,7 @@
 package school.fingerprint.nursecall.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
+import school.fingerprint.nursecall.dto.NurseCallInfoResponse;
 import school.fingerprint.nursecall.entity.NurseCall;
 import school.fingerprint.nursecall.repository.NurseCallJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
@@ -57,8 +59,16 @@ public class NurseCallService {
     }
 
     @Transactional(readOnly = true)
-    public List<NurseCall> getNurseCall(final LocalDate date) {
-        return nurseCallJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+    public List<NurseCallInfoResponse> getNurseCall(final LocalDate date) {
+        List<NurseCallInfoResponse> responses = new ArrayList<>();
+        List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByDateAfterOrderByDateDesc(
+                date);
+        nurseCalls.forEach(nurseCall -> {
+            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+            Patient patient = checkPresent(patientNullable);
+            responses.add(NurseCallInfoResponse.of(nurseCall, patient));
+        });
+        return responses;
     }
 
     private static Patient checkPresent(final Optional<Patient> patient) {
@@ -68,12 +78,22 @@ public class NurseCallService {
         return patient.get();
     }
 
-    public List<NurseCall> getNurseCallByPatientId(final Long patientId) {
-        return nurseCallJpaRepository.findAllByPatientId(patientId);
+    public List<NurseCallInfoResponse> getNurseCallByPatientId(final Long patientId) {
+        List<NurseCallInfoResponse> responses = new ArrayList<>();
+        List<NurseCall> nurseCalls = nurseCallJpaRepository.findAllByPatientId(patientId);
+        nurseCalls.forEach(nurseCall -> {
+            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+            Patient patient = checkPresent(patientNullable);
+            responses.add(NurseCallInfoResponse.of(nurseCall, patient));
+        });
+        return responses;
     }
 
-    public NurseCall getNurseCallById(final Long emergencyId) {
-        return nurseCallJpaRepository.findById(emergencyId)
+    public NurseCallInfoResponse getNurseCallById(final Long emergencyId) {
+        NurseCall nurseCall = nurseCallJpaRepository.findById(emergencyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
+        Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+        Patient patient = checkPresent(patientNullable);
+        return NurseCallInfoResponse.of(nurseCall, patient);
     }
 }

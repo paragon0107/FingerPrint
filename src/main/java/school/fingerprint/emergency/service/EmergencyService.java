@@ -1,6 +1,7 @@
 package school.fingerprint.emergency.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
+import school.fingerprint.emergency.dto.EmergencyInfoResponse;
 import school.fingerprint.emergency.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
@@ -57,8 +59,15 @@ public class EmergencyService {
     }
 
     @Transactional(readOnly = true)
-    public List<Emergency> getEmergency(final LocalDate date) {
-        return emergencyJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+    public List<EmergencyInfoResponse> getEmergency(final LocalDate date) {
+        List<EmergencyInfoResponse> responses = new ArrayList<>();
+        List<Emergency> emergencies = emergencyJpaRepository.findTop3ByDateAfterOrderByDateDesc(date);
+        emergencies.forEach(emergency -> {
+            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+            Patient patient = checkPresent(patientNullable);
+            responses.add(EmergencyInfoResponse.of(emergency, patient));
+        });
+        return responses;
     }
 
     private static Patient checkPresent(final Optional<Patient> patient) {
@@ -68,12 +77,22 @@ public class EmergencyService {
         return patient.get();
     }
 
-    public List<Emergency> getEmergencyByPatientId(final Long patientId) {
-        return emergencyJpaRepository.findAllByPatientId(patientId);
+    public List<EmergencyInfoResponse> getEmergencyByPatientId(final Long patientId) {
+        List<EmergencyInfoResponse> responses = new ArrayList<>();
+        List<Emergency> emergencies = emergencyJpaRepository.findAllByPatientId(patientId);
+        emergencies.forEach(emergency -> {
+            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+            Patient patient = checkPresent(patientNullable);
+            responses.add(EmergencyInfoResponse.of(emergency, patient));
+        });
+        return responses;
     }
 
-    public Emergency getEmergencyById(final Long emergencyId) {
-        return emergencyJpaRepository.findById(emergencyId)
+    public EmergencyInfoResponse getEmergencyById(final Long emergencyId) {
+        Emergency emergency = emergencyJpaRepository.findById(emergencyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
+        Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+        Patient patient = checkPresent(patientNullable);
+        return EmergencyInfoResponse.of(emergency, patient);
     }
 }
