@@ -61,7 +61,7 @@ public class NurseCallService {
     @Transactional(readOnly = true)
     public List<NurseCallInfoResponse> getNurseCall(final LocalDateTime date) {
         List<NurseCallInfoResponse> responses = new ArrayList<>();
-        List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(
+        List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(
                 date);
         nurseCalls.forEach(nurseCall -> {
             Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());

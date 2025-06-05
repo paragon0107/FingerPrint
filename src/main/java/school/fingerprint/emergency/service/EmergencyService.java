@@ -1,6 +1,5 @@
 package school.fingerprint.emergency.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,7 +61,7 @@ public class EmergencyService {
     @Transactional(readOnly = true)
     public List<EmergencyInfoResponse> getEmergency(final LocalDateTime date) {
         List<EmergencyInfoResponse> responses = new ArrayList<>();
-        List<Emergency> emergencies = emergencyJpaRepository.findTop3ByCreatedAtAfterOrderByCreatedAtDesc(date);
+        List<Emergency> emergencies = emergencyJpaRepository.findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(date);
         emergencies.forEach(emergency -> {
             Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
             Patient patient = checkPresent(patientNullable);

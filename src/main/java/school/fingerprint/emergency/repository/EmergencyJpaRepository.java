@@ -1,6 +1,5 @@
 package school.fingerprint.emergency.repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +8,7 @@ import school.fingerprint.emergency.repository.entity.Emergency;
 
 @Repository
 public interface EmergencyJpaRepository extends JpaRepository<Emergency, Long> {
-    List<Emergency> findTop3ByCreatedAtAfterOrderByCreatedAtDesc(final LocalDateTime createdAt);
+    List<Emergency> findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(final LocalDateTime createdAt);
 
     List<Emergency> findAllByPatientId(final Long patientId);
 }
