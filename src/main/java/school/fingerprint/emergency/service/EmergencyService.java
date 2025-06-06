@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
 import school.fingerprint.emergency.dto.EmergencyInfoResponse;
+import school.fingerprint.emergency.dto.EmergencyMemoRequest;
 import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.repository.PatientJpaRepository;
@@ -28,8 +29,9 @@ public class EmergencyService {
     public void createEmergency(final EmergencyCreateRequest request) {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
-        emergencyJpaRepository.save(Emergency.of(patient.getId()));
-
+        Emergency emergency = Emergency.of(patient.getId());
+        emergencyJpaRepository.save(emergency);
+        handler.createEmergency(emergency);
         if(handler.isContainPatient(patient.getSsid())){
             handler.updatePatientStatusInfo(
                 patient.getSsid(),
@@ -54,7 +56,7 @@ public class EmergencyService {
         } else {
             throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
         }
-        emergency.confirm(request.reason());
+        emergency.confirm(request.responsibility());
         emergencyJpaRepository.save(emergency);
     }
 
@@ -94,5 +96,13 @@ public class EmergencyService {
         Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
         Patient patient = checkPresent(patientNullable);
         return EmergencyInfoResponse.of(emergency, patient);
+    }
+
+    @Transactional
+    public void memoEmergency(EmergencyMemoRequest request) {
+        Emergency emergency = emergencyJpaRepository.findById(request.emergencyId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
+        emergency.memo(request.memo());
+        emergencyJpaRepository.save(emergency);
     }
 }

@@ -20,13 +20,19 @@ public class NurseCall extends BaseTime {
 
     private Long patientId;
 
+    private String responsibility;
+
     private String reason;
 
     public static NurseCall of(final Long patientId) {
-        return new NurseCall(null, patientId,null);
+        return new NurseCall(null, patientId,null,null);
     }
 
-    public void confirm(final String reason) {
+    public void confirm(final String responsibility) {
+        this.responsibility = responsibility;
+    }
+
+    public void memo(final String reason) {
         this.reason = reason;
     }
 }

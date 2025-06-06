@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
 import school.fingerprint.nursecall.dto.NurseCallInfoResponse;
+import school.fingerprint.nursecall.dto.NurseCallMemoRequest;
 import school.fingerprint.nursecall.repository.NurseCallJpaRepository;
 import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.repository.PatientJpaRepository;
@@ -29,7 +30,7 @@ public class NurseCallService {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
         nurseCallJpaRepository.save(NurseCall.of(patient.getId()));
-
+        handler.createNurseCall(NurseCall.of(patient.getId()));
         if(handler.isContainPatient(patient.getSsid())){
             handler.updatePatientStatusInfo(
                 patient.getSsid(),
@@ -95,5 +96,13 @@ public class NurseCallService {
         Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
         Patient patient = checkPresent(patientNullable);
         return NurseCallInfoResponse.of(nurseCall, patient);
+    }
+
+    @Transactional
+    public void memoNurseCall(NurseCallMemoRequest request) {
+        NurseCall nurseCall = nurseCallJpaRepository.findById(request.nurseCallId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
+        nurseCall.memo(request.memo());
+        nurseCallJpaRepository.save(nurseCall);
     }
 }

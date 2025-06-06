@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import school.fingerprint.emergency.repository.entity.Emergency;
+import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.entity.PatientLocatedInfo;
 
 import jakarta.websocket.Session;
@@ -59,6 +61,32 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         String json;
         try {
             json = mapper.writeValueAsString(info);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        broadcast(json);
+    }
+
+    public void createEmergency(final Emergency emergency) {
+        String json;
+        try {
+            json = mapper.writeValueAsString(Map.of(
+                    "type", "emergency",
+                    "emergencyId", emergency.getId(),
+                    "createAt", emergency.getCreatedAt().toString()));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        broadcast(json);
+    }
+
+    public void createNurseCall(final NurseCall nurseCall) {
+        String json;
+        try {
+            json = mapper.writeValueAsString(Map.of(
+                    "type", "help",
+                    "emergencyId", nurseCall.getId(),
+                    "createAt", nurseCall.getCreatedAt().toString()));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

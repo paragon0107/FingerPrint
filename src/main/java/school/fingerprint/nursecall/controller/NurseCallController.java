@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import school.fingerprint.global.dto.SuccessResponse;
 import school.fingerprint.nursecall.dto.NurseCallConfirmRequest;
 import school.fingerprint.nursecall.dto.NurseCallCreateRequest;
 import school.fingerprint.nursecall.dto.NurseCallInfoResponse;
+import school.fingerprint.nursecall.dto.NurseCallMemoRequest;
 import school.fingerprint.nursecall.service.NurseCallService;
 
 @RestController
@@ -57,6 +59,17 @@ public class NurseCallController {
         return SuccessResponse.of(
                 HttpStatus.CREATED,
                 "널스 콜 확인 성공"
+        );
+    }
+
+    @PutMapping
+    public ResponseEntity<SuccessResponse<?>> memoNurseCall(
+            @RequestBody NurseCallMemoRequest request
+    ) {
+        nurseCallService.memoNurseCall(request);
+        return SuccessResponse.of(
+                HttpStatus.CREATED,
+                "널스 콜 메모 성공"
         );
     }
 

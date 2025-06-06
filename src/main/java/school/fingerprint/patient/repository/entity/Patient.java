@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
@@ -27,17 +28,17 @@ public class Patient {
     private String name;
     
     private LocalDate birth;
-
+    @Nullable
     private boolean gender;
-
+    @Nullable
     private String bloodType;
-
+    @Nullable
     private String careDoctor;
-
+    @Nullable
     private String disease;
-
+    @Nullable
     private String roomNumber;
-    
+    @Nullable
     private String ssid;
 
     public static Patient of(final String name, final LocalDate birth,final String ssid) {

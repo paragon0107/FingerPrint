@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import school.fingerprint.emergency.dto.EmergencyConfirmRequest;
 import school.fingerprint.emergency.dto.EmergencyCreateRequest;
 import school.fingerprint.emergency.dto.EmergencyInfoResponse;
+import school.fingerprint.emergency.dto.EmergencyMemoRequest;
 import school.fingerprint.emergency.service.EmergencyService;
 import school.fingerprint.global.dto.SuccessResponse;
 
@@ -58,6 +60,17 @@ public class EmergencyController {
         return SuccessResponse.of(
                 HttpStatus.CREATED,
                 "응급 콜 확인 성공"
+        );
+    }
+
+    @PutMapping
+    public ResponseEntity<SuccessResponse<?>> memoEmergency(
+            @RequestBody EmergencyMemoRequest request
+    ) {
+        emergencyService.memoEmergency(request);
+        return SuccessResponse.of(
+                HttpStatus.CREATED,
+                "응급 콜 메모 성공"
         );
     }
 
