@@ -13,8 +13,10 @@ import school.fingerprint.emergency.dto.EmergencyInfoResponse;
 import school.fingerprint.emergency.dto.EmergencyMemoRequest;
 import school.fingerprint.emergency.repository.entity.Emergency;
 import school.fingerprint.emergency.repository.EmergencyJpaRepository;
+import school.fingerprint.patient.entity.PatientLocatedInfo;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
+import school.fingerprint.patient.websocket.PatientStatusInfo;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
 @Service
@@ -29,7 +31,8 @@ public class EmergencyService {
     public void createEmergency(final EmergencyCreateRequest request) {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
-        Emergency emergency = Emergency.of(patient.getId());
+        PatientLocatedInfo info = handler.getPatientLocatedInfo(patient.getSsid());
+        Emergency emergency = Emergency.of(patient.getId(),info);
         emergencyJpaRepository.save(emergency);
         handler.createEmergency(emergency);
         if(handler.isContainPatient(patient.getSsid())){

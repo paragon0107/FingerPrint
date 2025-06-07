@@ -1,6 +1,5 @@
 package school.fingerprint.emergency.controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

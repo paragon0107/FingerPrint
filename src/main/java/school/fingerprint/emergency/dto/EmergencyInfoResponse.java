@@ -1,6 +1,7 @@
 package school.fingerprint.emergency.dto;
 
 import school.fingerprint.emergency.repository.entity.Emergency;
+import school.fingerprint.patient.entity.PatientLocatedInfo;
 import school.fingerprint.patient.repository.entity.Patient;
 
 public record EmergencyInfoResponse(
@@ -9,7 +10,8 @@ public record EmergencyInfoResponse(
         String patientName,
         String reason,
         String createdAt,
-        String updatedAt
+        String updatedAt,
+        PatientLocatedInfo patientLocatedInfo
 ) {
     public static EmergencyInfoResponse of(
             final Emergency emergency,
@@ -21,7 +23,8 @@ public record EmergencyInfoResponse(
                 patient.getName(),
                 emergency.getReason(),
                 emergency.getCreatedAt().toString(),
-                emergency.getUpdatedAt().toString()
+                emergency.getUpdatedAt().toString(),
+                emergency.getPatientLocatedInfo()
         );
     }
 }

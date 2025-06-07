@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import school.fingerprint.global.entity.BaseTime;
+import school.fingerprint.patient.entity.PatientLocatedInfo;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +25,10 @@ public class Emergency extends BaseTime {
 
     private String reason;
 
-    public static Emergency of(final Long patientId) {
-        return new Emergency(null, patientId,null,null);
+    private PatientLocatedInfo patientLocatedInfo;
+
+    public static Emergency of(final Long patientId, final PatientLocatedInfo patientLocatedInfo) {
+        return new Emergency(null, patientId,null,null,patientLocatedInfo);
     }
 
     public void memo(final String reason) {

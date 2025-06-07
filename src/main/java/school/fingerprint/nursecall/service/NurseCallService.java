@@ -15,6 +15,7 @@ import school.fingerprint.nursecall.repository.NurseCallJpaRepository;
 import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
+import school.fingerprint.patient.websocket.PatientStatusInfo;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
 @Service
@@ -29,8 +30,10 @@ public class NurseCallService {
     public void createNurseCall(final NurseCallCreateRequest request) {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
-        nurseCallJpaRepository.save(NurseCall.of(patient.getId()));
-        handler.createNurseCall(NurseCall.of(patient.getId()));
+        PatientStatusInfo info = handler.getPatientLocatedInfo(patient.getSsid());
+        NurseCall nurseCall = NurseCall.of(patient.getId(), info);
+        nurseCallJpaRepository.save(nurseCall);
+        handler.createNurseCall(nurseCall);
         if(handler.isContainPatient(patient.getSsid())){
             handler.updatePatientStatusInfo(
                 patient.getSsid(),

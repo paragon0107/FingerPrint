@@ -13,6 +13,7 @@ public class PatientStatusInfo extends PatientLocatedInfo {
                 patient.getId(),
                 patient.getName(),
                 patient.getPlace(),
+                patient.getFloor(),
                 patient.getX(),
                 patient.getY(),
                 patient.getSsid()

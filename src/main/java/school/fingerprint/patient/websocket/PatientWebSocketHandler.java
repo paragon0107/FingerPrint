@@ -46,6 +46,14 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    public PatientStatusInfo getPatientLocatedInfo(final String ssid) {
+        PatientStatusInfo info = patientMap.get(ssid);
+        if (info == null) {
+            throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
+        }
+        return info;
+    }
+
     public void updatePatientLocatedInfo(final PatientLocatedInfo request) {
         PatientStatusInfo info = patientMap.get(request.getSsid());
         if(info == null){
