@@ -31,7 +31,7 @@ public class NurseCallService {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
         PatientStatusInfo info = handler.getPatientLocatedInfo(patient.getSsid());
-        NurseCall nurseCall = NurseCall.of(patient.getId(), info);
+        NurseCall nurseCall = NurseCall.of(info);
         nurseCallJpaRepository.save(nurseCall);
         handler.createNurseCall(nurseCall);
         if(handler.isContainPatient(patient.getSsid())){
@@ -68,7 +68,7 @@ public class NurseCallService {
         List<NurseCall> nurseCalls = nurseCallJpaRepository.findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(
                 date);
         nurseCalls.forEach(nurseCall -> {
-            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientLocatedInfo().getPatientId());
             Patient patient = checkPresent(patientNullable);
             responses.add(NurseCallInfoResponse.of(nurseCall, patient));
         });
@@ -84,9 +84,9 @@ public class NurseCallService {
 
     public List<NurseCallInfoResponse> getNurseCallByPatientId(final Long patientId) {
         List<NurseCallInfoResponse> responses = new ArrayList<>();
-        List<NurseCall> nurseCalls = nurseCallJpaRepository.findAllByPatientId(patientId);
+        List<NurseCall> nurseCalls = nurseCallJpaRepository.findAllByPatientLocatedInfoPatientId(patientId);
         nurseCalls.forEach(nurseCall -> {
-            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+            Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientLocatedInfo().getPatientId());
             Patient patient = checkPresent(patientNullable);
             responses.add(NurseCallInfoResponse.of(nurseCall, patient));
         });
@@ -96,7 +96,7 @@ public class NurseCallService {
     public NurseCallInfoResponse getNurseCallById(final Long emergencyId) {
         NurseCall nurseCall = nurseCallJpaRepository.findById(emergencyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
-        Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientId());
+        Optional<Patient> patientNullable = patientJpaRepository.findById(nurseCall.getPatientLocatedInfo().getPatientId());
         Patient patient = checkPresent(patientNullable);
         return NurseCallInfoResponse.of(nurseCall, patient);
     }

@@ -10,5 +10,5 @@ import school.fingerprint.emergency.repository.entity.Emergency;
 public interface EmergencyJpaRepository extends JpaRepository<Emergency, Long> {
     List<Emergency> findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(final LocalDateTime createdAt);
 
-    List<Emergency> findAllByPatientId(final Long patientId);
+    List<Emergency> findAllByPatientLocatedInfoPatientId(final Long patientId);
 }

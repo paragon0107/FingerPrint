@@ -10,7 +10,7 @@ public class PatientStatusInfo extends PatientLocatedInfo {
 
     public PatientStatusInfo(PatientLocatedInfo patient) {
         super(
-                patient.getId(),
+                patient.getPatientId(),
                 patient.getName(),
                 patient.getPlace(),
                 patient.getFloor(),

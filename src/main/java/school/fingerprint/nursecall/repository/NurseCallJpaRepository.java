@@ -10,5 +10,5 @@ import school.fingerprint.nursecall.repository.entity.NurseCall;
 public interface NurseCallJpaRepository extends JpaRepository<NurseCall, Long> {
     List<NurseCall> findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(final LocalDateTime createdAt);
 
-    List<NurseCall> findAllByPatientId(final Long patientId);
+    List<NurseCall> findAllByPatientLocatedInfoPatientId(final Long patientId);
 }

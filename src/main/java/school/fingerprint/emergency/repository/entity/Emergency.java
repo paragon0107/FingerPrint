@@ -19,16 +19,14 @@ public class Emergency extends BaseTime {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    private Long patientId;
-
     private String Responsibility;
 
     private String reason;
 
     private PatientLocatedInfo patientLocatedInfo;
 
-    public static Emergency of(final Long patientId, final PatientLocatedInfo patientLocatedInfo) {
-        return new Emergency(null, patientId,null,null,patientLocatedInfo);
+    public static Emergency of(final PatientLocatedInfo patientLocatedInfo) {
+        return new Emergency(null,null,null,patientLocatedInfo);
     }
 
     public void memo(final String reason) {

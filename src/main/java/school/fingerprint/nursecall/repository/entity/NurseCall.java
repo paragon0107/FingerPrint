@@ -19,16 +19,14 @@ public class NurseCall extends BaseTime {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    private Long patientId;
-
     private String responsibility;
 
     private String reason;
 
     private PatientLocatedInfo patientLocatedInfo;
 
-    public static NurseCall of(final Long patientId, final PatientLocatedInfo patientLocatedInfo) {
-        return new NurseCall(null, patientId,null,null,patientLocatedInfo);
+    public static NurseCall of( final PatientLocatedInfo patientLocatedInfo) {
+        return new NurseCall(null,null,null,patientLocatedInfo);
     }
 
     public void confirm(final String responsibility) {

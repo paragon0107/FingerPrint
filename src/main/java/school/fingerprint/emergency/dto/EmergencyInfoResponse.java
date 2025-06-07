@@ -19,7 +19,7 @@ public record EmergencyInfoResponse(
             ) {
         return new EmergencyInfoResponse(
                 emergency.getId(),
-                emergency.getPatientId(),
+                emergency.getPatientLocatedInfo().getPatientId(),
                 patient.getName(),
                 emergency.getReason(),
                 emergency.getCreatedAt().toString(),

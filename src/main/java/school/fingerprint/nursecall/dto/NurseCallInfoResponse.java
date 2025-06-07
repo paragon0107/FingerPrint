@@ -19,7 +19,7 @@ public record NurseCallInfoResponse(
             ) {
         return new NurseCallInfoResponse(
                 nurseCall.getId(),
-                nurseCall.getPatientId(),
+                nurseCall.getPatientLocatedInfo().getPatientId(),
                 patient.getName(),
                 nurseCall.getReason(),
                 nurseCall.getCreatedAt().toString(),

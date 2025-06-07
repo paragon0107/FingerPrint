@@ -16,7 +16,6 @@ import school.fingerprint.emergency.repository.EmergencyJpaRepository;
 import school.fingerprint.patient.entity.PatientLocatedInfo;
 import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
-import school.fingerprint.patient.websocket.PatientStatusInfo;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
 @Service
@@ -32,7 +31,7 @@ public class EmergencyService {
         Optional<Patient> patientNullable = patientJpaRepository.findBySsid(request.ssid());
         Patient patient = checkPresent(patientNullable);
         PatientLocatedInfo info = handler.getPatientLocatedInfo(patient.getSsid());
-        Emergency emergency = Emergency.of(patient.getId(),info);
+        Emergency emergency = Emergency.of(info);
         emergencyJpaRepository.save(emergency);
         handler.createEmergency(emergency);
         if(handler.isContainPatient(patient.getSsid())){
@@ -68,7 +67,7 @@ public class EmergencyService {
         List<EmergencyInfoResponse> responses = new ArrayList<>();
         List<Emergency> emergencies = emergencyJpaRepository.findTop3ByCreatedAtBeforeOrderByCreatedAtDesc(date);
         emergencies.forEach(emergency -> {
-            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientLocatedInfo().getPatientId());
             Patient patient = checkPresent(patientNullable);
             responses.add(EmergencyInfoResponse.of(emergency, patient));
         });
@@ -84,9 +83,9 @@ public class EmergencyService {
 
     public List<EmergencyInfoResponse> getEmergencyByPatientId(final Long patientId) {
         List<EmergencyInfoResponse> responses = new ArrayList<>();
-        List<Emergency> emergencies = emergencyJpaRepository.findAllByPatientId(patientId);
+        List<Emergency> emergencies = emergencyJpaRepository.findAllByPatientLocatedInfoPatientId(patientId);
         emergencies.forEach(emergency -> {
-            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+            Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientLocatedInfo().getPatientId());
             Patient patient = checkPresent(patientNullable);
             responses.add(EmergencyInfoResponse.of(emergency, patient));
         });
@@ -96,7 +95,7 @@ public class EmergencyService {
     public EmergencyInfoResponse getEmergencyById(final Long emergencyId) {
         Emergency emergency = emergencyJpaRepository.findById(emergencyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 응급 콜이 존재하지 않습니다."));
-        Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientId());
+        Optional<Patient> patientNullable = patientJpaRepository.findById(emergency.getPatientLocatedInfo().getPatientId());
         Patient patient = checkPresent(patientNullable);
         return EmergencyInfoResponse.of(emergency, patient);
     }
