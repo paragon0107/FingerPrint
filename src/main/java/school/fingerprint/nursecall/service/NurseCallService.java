@@ -33,7 +33,7 @@ public class NurseCallService {
         PatientStatusInfo info = handler.getPatientLocatedInfo(patient.getSsid());
         NurseCall nurseCall = NurseCall.of(info);
         nurseCallJpaRepository.save(nurseCall);
-        handler.createNurseCall(nurseCall);
+        handler.createNurseCall(nurseCall,patient);
         if(handler.isContainPatient(patient.getSsid())){
             handler.updatePatientStatusInfo(
                 patient.getSsid(),

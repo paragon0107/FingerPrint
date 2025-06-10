@@ -12,6 +12,7 @@ import school.fingerprint.nursecall.repository.entity.NurseCall;
 import school.fingerprint.patient.entity.PatientLocatedInfo;
 
 import jakarta.websocket.Session;
+import school.fingerprint.patient.repository.entity.Patient;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -75,11 +76,13 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         broadcast(json);
     }
 
-    public void createEmergency(final Emergency emergency) {
+    public void createEmergency(final Emergency emergency,final Patient patient) {
         String json;
         try {
             json = mapper.writeValueAsString(Map.of(
                     "type", "emergency",
+                    "patientId", patient.getId(),
+                    "name",patient.getName(),
                     "emergencyId", emergency.getId(),
                     "createAt", emergency.getCreatedAt().toString()));
         } catch (JsonProcessingException e) {
@@ -88,11 +91,13 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         broadcast(json);
     }
 
-    public void createNurseCall(final NurseCall nurseCall) {
+    public void createNurseCall(final NurseCall nurseCall, final Patient patient) {
         String json;
         try {
             json = mapper.writeValueAsString(Map.of(
                     "type", "help",
+                    "patientId", patient.getId(),
+                    "name", patient.getName(),
                     "emergencyId", nurseCall.getId(),
                     "createAt", nurseCall.getCreatedAt().toString()));
         } catch (JsonProcessingException e) {

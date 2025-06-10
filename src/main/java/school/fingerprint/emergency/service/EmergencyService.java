@@ -33,7 +33,7 @@ public class EmergencyService {
         PatientLocatedInfo info = handler.getPatientLocatedInfo(patient.getSsid());
         Emergency emergency = Emergency.of(info);
         emergencyJpaRepository.save(emergency);
-        handler.createEmergency(emergency);
+        handler.createEmergency(emergency,patient);
         if(handler.isContainPatient(patient.getSsid())){
             handler.updatePatientStatusInfo(
                 patient.getSsid(),
