@@ -58,7 +58,7 @@ public class NurseCallService {
         } else {
             throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
         }
-        nurseCall.confirm(request.reason());
+        nurseCall.confirm(request.responsibility());
         nurseCallJpaRepository.save(nurseCall);
     }
 
