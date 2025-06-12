@@ -25,6 +25,7 @@ public class PatientLocatedInfo {
             final String locationInfo
     ) {
         int floor;
+        System.out.println("locationInfo = " + locationInfo);
         String[] location = locationInfo.split("_");
         if (location[1].startsWith("6")) {
             floor = 6;
@@ -35,6 +36,7 @@ public class PatientLocatedInfo {
                 floor = 5;
             }
         }
+        System.out.println("floor = " + floor);
         String place = String.join("_", Arrays.copyOf(location, location.length - 2));
         return new PatientLocatedInfo(
                 patient.getId(),
