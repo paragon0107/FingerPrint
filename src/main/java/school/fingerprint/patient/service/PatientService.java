@@ -37,7 +37,7 @@ public class PatientService {
     @Transactional
     public void updatePatientLocation(final String ssid, PatientLocationUpdate request) {
         Patient patient = getPatient(ssid);
-        PredictedLocation location = aiServerClient.getPatientStatusFromAi(request.locations());
+        PredictedLocation location = aiServerClient.getPatientStatusFromAi(request);
         locationHandler.updatePatientLocatedInfo(PatientLocatedInfo.of(
                 patient,
                 location.predicted_location()

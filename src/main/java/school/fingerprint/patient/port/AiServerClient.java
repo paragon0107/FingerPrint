@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import school.fingerprint.patient.dto.PatientLocationUpdate;
 import school.fingerprint.patient.port.dto.PredictedLocation;
 import school.fingerprint.patient.port.dto.RssiRequest;
 
@@ -15,15 +16,15 @@ public class AiServerClient {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public PredictedLocation getPatientStatusFromAi(final Map<String, Integer> data) {
+    public PredictedLocation getPatientStatusFromAi(final PatientLocationUpdate request) {
         String url = "http://fp-ai.duckdns.org:8000/predict";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<RssiRequest> request = new HttpEntity<>(new RssiRequest(data), headers);
+        HttpEntity<RssiRequest> aiRequest = new HttpEntity<>(new RssiRequest(request), headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, aiRequest, String.class);
 
         try {
             // 응답 본문을 PredictedLocation 객체로 변환
