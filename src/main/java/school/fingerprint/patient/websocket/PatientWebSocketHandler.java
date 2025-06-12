@@ -57,13 +57,13 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
 
     public void updatePatientLocatedInfo(final PatientLocatedInfo request) {
         PatientStatusInfo info = patientMap.get(request.getSsid());
-        if(info == null){
+        if (info == null) {
             info = new PatientStatusInfo(request);
-        }else {
+        } else {
             info.updateLocation(
-                request.getPlace(),
-                request.getX(),
-                request.getY()
+                    request.getPlace(),
+                    request.getX(),
+                    request.getY()
             );
         }
         patientMap.put(info.getSsid(), info);
@@ -76,15 +76,17 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         broadcast(json);
     }
 
-    public void createEmergency(final Emergency emergency,final Patient patient) {
+    public void createEmergency(final Emergency emergency, final Patient patient) {
         String json;
         try {
             json = mapper.writeValueAsString(Map.of(
                     "type", "emergency",
                     "patientId", patient.getId(),
-                    "name",patient.getName(),
+                    "name", patient.getName(),
                     "emergencyId", emergency.getId(),
-                    "createAt", emergency.getCreatedAt().toString()));
+                    "createAt", emergency.getCreatedAt().toString(),
+                    "locatedInfo", emergency.getPatientLocatedInfo()
+            ));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -99,7 +101,9 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
                     "patientId", patient.getId(),
                     "name", patient.getName(),
                     "emergencyId", nurseCall.getId(),
-                    "createAt", nurseCall.getCreatedAt().toString()));
+                    "createAt", nurseCall.getCreatedAt().toString(),
+                    "locatedInfo", nurseCall.getPatientLocatedInfo()
+            ));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +146,7 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
     }
 
 
-    public void updatePatientStatusInfo(final String ssid, final String  state) {
+    public void updatePatientStatusInfo(final String ssid, final String state) {
         PatientStatusInfo info = patientMap.get(ssid);
         if (info == null) {
             throw new IllegalArgumentException("해당 SSID를 가진 환자가 존재하지 않습니다.");
