@@ -19,7 +19,7 @@ public class Emergency extends BaseTime {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    private String Responsibility;
+    private String responsibility;
 
     private String reason;
 
@@ -33,7 +33,7 @@ public class Emergency extends BaseTime {
         this.reason = reason;
     }
 
-    public void confirm(final String Responsibility) {
-        this.Responsibility = Responsibility;
+    public void confirm(final String responsibility) {
+        this.responsibility = responsibility;
     }
 }

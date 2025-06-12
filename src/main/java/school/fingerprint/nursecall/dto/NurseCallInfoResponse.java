@@ -9,6 +9,7 @@ public record NurseCallInfoResponse(
         long patientId,
         String patientName,
         String reason,
+        String responsibility,
         String createdAt,
         String updatedAt,
         PatientLocatedInfo patientLocatedInfo
@@ -22,6 +23,7 @@ public record NurseCallInfoResponse(
                 nurseCall.getPatientLocatedInfo().getPatientId(),
                 patient.getName(),
                 nurseCall.getReason(),
+                nurseCall.getResponsibility(),
                 nurseCall.getCreatedAt().toString(),
                 nurseCall.getUpdatedAt().toString(),
                 nurseCall.getPatientLocatedInfo()

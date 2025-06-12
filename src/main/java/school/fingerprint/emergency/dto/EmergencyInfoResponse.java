@@ -9,6 +9,7 @@ public record EmergencyInfoResponse(
         long patientId,
         String patientName,
         String reason,
+        String responsibility,
         String createdAt,
         String updatedAt,
         PatientLocatedInfo patientLocatedInfo
@@ -22,6 +23,7 @@ public record EmergencyInfoResponse(
                 emergency.getPatientLocatedInfo().getPatientId(),
                 patient.getName(),
                 emergency.getReason(),
+                emergency.getResponsibility(),
                 emergency.getCreatedAt().toString(),
                 emergency.getUpdatedAt().toString(),
                 emergency.getPatientLocatedInfo()
