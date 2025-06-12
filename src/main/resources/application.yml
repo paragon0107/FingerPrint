@@ -1,13 +1,13 @@
 spring:
   datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: fingerprint-newer.cdsc42kaaniv.ap-northeast-2.rds.amazonaws.com:5432/postgres
-#    username: postgres
-#    password: fingerprint-newer
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: root
-    password: 1234
+    url: fingerprint-newer.cdsc42kaaniv.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: fingerprint-newer
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/postgres
+#    username: root
+#    password: 1234
   jpa:
     show-sql: true
     hibernate:
