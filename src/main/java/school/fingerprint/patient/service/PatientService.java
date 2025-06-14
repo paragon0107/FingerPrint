@@ -12,6 +12,7 @@ import school.fingerprint.patient.repository.PatientJpaRepository;
 import school.fingerprint.patient.repository.entity.Patient;
 import school.fingerprint.patient.websocket.PatientWebSocketHandler;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,10 +39,15 @@ public class PatientService {
     public void updatePatientLocation(final String ssid, PatientLocationUpdate request) {
         Patient patient = getPatient(ssid);
         PredictedLocation location = aiServerClient.getPatientStatusFromAi(request);
-        locationHandler.updatePatientLocatedInfo(PatientLocatedInfo.of(
+        PatientLocatedInfo patientLocatedInfo = PatientLocatedInfo.of(
                 patient,
                 location.predicted_location()
-        ));
+        );
+        locationHandler.updatePatientLocatedInfo(patientLocatedInfo);
+        System.out.println("업데이트 시간"+ new Date());
+        System.out.println("환자 위치 : " + patientLocatedInfo.getPlace());
+        System.out.println("환자 위치 층: " + patientLocatedInfo.getFloor());
+        System.out.println(request.toString());
     }
 
     public Patient getPatient(final String ssid) {
