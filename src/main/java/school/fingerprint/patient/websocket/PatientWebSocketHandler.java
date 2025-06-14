@@ -73,10 +73,9 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        broadcast(json);
         System.out.println("환자 위치 : " + request.getPlace() + " (" + request.getX() + ", " + request.getY() + ")");
         System.out.println("환자 위치 층: " + request.getFloor());
-
+        System.out.println(" ");
     }
 
     public void createEmergency(final Emergency emergency, final Patient patient) {
@@ -189,5 +188,17 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
                 sessions.remove(session);
             }
         }
+    }
+
+    @Scheduled(fixedRate = 3000) // 3초마다 실행
+    public void broadcastAllPatientStatus() {
+        String json;
+        try {
+            json = mapper.writeValueAsString(patientMap.values());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        broadcast(json);
+        System.out.println("모든 환자 상태 정보 브로드캐스트: " + json);
     }
 }
