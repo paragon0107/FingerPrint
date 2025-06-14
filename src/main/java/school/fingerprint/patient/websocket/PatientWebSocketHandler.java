@@ -74,6 +74,9 @@ public class PatientWebSocketHandler extends TextWebSocketHandler {
             throw new RuntimeException(e);
         }
         broadcast(json);
+        System.out.println("환자 위치 : " + request.getPlace() + " (" + request.getX() + ", " + request.getY() + ")");
+        System.out.println("환자 위치 층: " + request.getFloor());
+
     }
 
     public void createEmergency(final Emergency emergency, final Patient patient) {
