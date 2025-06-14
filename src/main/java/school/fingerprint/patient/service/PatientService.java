@@ -44,7 +44,8 @@ public class PatientService {
                 location.predicted_location()
         );
         locationHandler.updatePatientLocatedInfo(patientLocatedInfo);
-        System.out.println("업데이트 시간"+ new Date());
+        System.out.println("환자 ssid" + ssid);
+        System.out.println("업데이트 시간" + new Date());
         System.out.println("환자 위치 : " + patientLocatedInfo.getPlace());
         System.out.println("환자 위치 층: " + patientLocatedInfo.getFloor());
         System.out.println(request.toString());
